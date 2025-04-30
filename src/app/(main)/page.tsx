@@ -1,14 +1,22 @@
 "use client";
 
 import * as React from "react";
-import axios from "axios";
+import dynamic from 'next/dynamic';
 import SearchBar from "@/components/SearchBar";
 // import SearchResultsGrid from "@/components/SearchResultsGrid"; // Replaced
-import SearchResultsWithAds from "@/components/SearchResultsWithAds"; // Use the component with ads
 import { type SearchResultItem } from "@/components/ModelCard";
 import { type SponsoredResultItem } from "@/components/SponsoredResultCard";
 import FilterPanel, { type FilterState } from "@/components/FilterPanel";
-import { getSponsoredResults } from "@/lib/adService"; // Import ad service
+
+// Dynamically import components that might cause hydration issues
+const SearchResultsWithAds = dynamic(() => import("@/components/SearchResultsWithAds"), { ssr: false });
+const axios = dynamic(() => import("axios"), { ssr: false });
+
+// Import function with dynamic import to avoid SSR issues
+const getSponsoredResults = async (query: string) => {
+  const { getSponsoredResults } = await import("@/lib/adService");
+  return getSponsoredResults(query);
+};
 
 // Define the structure of the API response
 interface ApiResponse {
@@ -53,9 +61,13 @@ export default function HomePage() {
         params.append("sources", currentFilters.sources.join(","));
       }
 
+      // Dynamically import axios if needed
+      const axiosModule = await import('axios');
+      const axiosInstance = axiosModule.default;
+
       // Fetch regular results and sponsored results in parallel
       const [resultsResponse, sponsoredResponse] = await Promise.all([
-        axios.get<ApiResponse>(`/api/search?${params.toString()}`),
+        axiosInstance.get<ApiResponse>(`/api/search?${params.toString()}`),
         getSponsoredResults(query.trim()), // Fetch sponsored results
       ]);
 
