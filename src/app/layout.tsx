@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
-import AuthProvider from "@/components/AuthProvider";
-import Header from "@/components/Header";
-import FooterAdBanner from "@/components/FooterAdBanner"; // Import the FooterAdBanner
-import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,16 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}>
-        <AuthProvider>
-          <div className="relative flex min-h-screen flex-col">
-            <Header />
-            <div className="flex-1">
-              {children}
-            </div>
-            <FooterAdBanner /> {/* Add the FooterAdBanner here */}
+      <body className={`min-h-screen bg-background font-sans antialiased ${inter.className}`}>
+        <div className="relative flex min-h-screen flex-col">
+          <div className="flex-1">
+            {children}
           </div>
-        </AuthProvider>
+        </div>
       </body>
     </html>
   );
