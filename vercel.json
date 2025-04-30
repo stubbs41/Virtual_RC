@@ -1,21 +1,9 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next",
-      "config": {
-        "buildCommand": "npm run vercel-build",
-        "outputDirectory": ".next"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
   "cleanUrls": true,
-  "ignoreCommand": "if [ -d '.next/server/app/(main)' ]; then rm -rf '.next/server/app/(main)'; fi"
+  "github": {
+    "silent": false
+  }
 }

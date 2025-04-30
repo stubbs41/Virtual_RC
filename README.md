@@ -1,6 +1,6 @@
 # 3D Model Search Aggregator
 
-A Next.js application that aggregates 3D model search results from multiple platforms, providing a unified search experience for users looking for 3D models.
+A Next.js application that aggregates 3D model search results from multiple platforms, providing a unified search experience for users looking for 3D models. This application helps users find the perfect 3D model across various sources.
 
 ## Features
 
