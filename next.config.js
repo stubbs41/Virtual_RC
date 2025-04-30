@@ -9,6 +9,13 @@ const nextConfig = {
   experimental: {
     optimizeCss: true, // Enable CSS optimization
   },
+  // Explicitly exclude the (main) route group
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  // Disable static optimization for problematic routes
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
 };
 
 module.exports = nextConfig;
