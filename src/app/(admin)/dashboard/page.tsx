@@ -9,25 +9,34 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button";
 
 export default function AdminDashboardPage() {
-  const { data: session, status } = useSession();
   const router = useRouter();
   const [hasPermission, setHasPermission] = React.useState<boolean | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [status, setStatus] = React.useState<string>("loading");
+  const [session, setSession] = React.useState<any>(null);
 
-  // Check permission on mount
+  // Check session and permission on mount, but only in browser
   React.useEffect(() => {
-    if (status === "authenticated" && session?.user?.id) {
-      checkUserPermission(session.user.id, "view:admin_dashboard").then(permissionResult => {
-        setHasPermission(permissionResult);
-        if (!permissionResult) {
-          setError("You do not have permission to view the admin dashboard.");
-          // Optionally redirect: router.push("/unauthorized");
+    if (typeof window !== "undefined") {
+      import("next-auth/react").then(({ useSession }) => {
+        const { data, status } = useSession();
+        setSession(data);
+        setStatus(status);
+
+        if (status === "unauthenticated") {
+          router.push("/login");
+        } else if (status === "authenticated" && data?.user?.id) {
+          checkUserPermission(data.user.id, "view:admin_dashboard").then(permissionResult => {
+            setHasPermission(permissionResult);
+            if (!permissionResult) {
+              setError("You do not have permission to view the admin dashboard.");
+              // Optionally redirect: router.push("/unauthorized");
+            }
+          });
         }
       });
-    } else if (status === "unauthenticated") {
-      router.push("/login");
     }
-  }, [status, session, router]);
+  }, [router]);
 
   if (status === "loading" || hasPermission === null) {
     return <div className="container mx-auto p-8">Loading...</div>;

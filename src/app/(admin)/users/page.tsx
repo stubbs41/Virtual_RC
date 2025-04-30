@@ -41,7 +41,6 @@ type User = {
 };
 
 export default function UserManagementPage() {
-  const { data: session, status } = useSession();
   const router = useRouter();
   const [users, setUsers] = React.useState<User[]>([]);
   const [allRoles, setAllRoles] = React.useState<Role[]>([]);
@@ -50,21 +49,31 @@ export default function UserManagementPage() {
   const [editingUser, setEditingUser] = React.useState<User | null>(null);
   const [selectedRoleIds, setSelectedRoleIds] = React.useState<string[]>([]);
   const [hasPermission, setHasPermission] = React.useState<boolean | null>(null);
+  const [status, setStatus] = React.useState<string>("loading");
+  const [session, setSession] = React.useState<any>(null);
 
-  // Check permission on mount
+  // Check session and permission on mount, but only in browser
   React.useEffect(() => {
-    if (status === "authenticated" && session?.user?.id) {
-      checkUserPermission(session.user.id, "manage:users").then(permissionResult => {
-        setHasPermission(permissionResult);
-        if (!permissionResult) {
-          setError("You do not have permission to manage users.");
-          // Optionally redirect: router.push("/unauthorized");
+    if (typeof window !== "undefined") {
+      import("next-auth/react").then(({ useSession }) => {
+        const { data, status } = useSession();
+        setSession(data);
+        setStatus(status);
+
+        if (status === "unauthenticated") {
+          router.push("/login");
+        } else if (status === "authenticated" && data?.user?.id) {
+          checkUserPermission(data.user.id, "manage:users").then(permissionResult => {
+            setHasPermission(permissionResult);
+            if (!permissionResult) {
+              setError("You do not have permission to manage users.");
+              // Optionally redirect: router.push("/unauthorized");
+            }
+          });
         }
       });
-    } else if (status === "unauthenticated") {
-      router.push("/login");
     }
-  }, [status, session, router]);
+  }, [router]);
 
   const fetchData = React.useCallback(async () => {
     if (hasPermission === false) return; // Don't fetch if no permission

@@ -57,7 +57,6 @@ type ImportResult = {
 };
 
 export default function CsvImportPage() {
-  const { data: session, status } = useSession();
   const router = useRouter();
   const [file, setFile] = React.useState<File | null>(null);
   const [headers, setHeaders] = React.useState<string[]>([]);
@@ -68,20 +67,30 @@ export default function CsvImportPage() {
   const [error, setError] = React.useState<string | null>(null);
   const [importResult, setImportResult] = React.useState<ImportResult | null>(null);
   const [hasPermission, setHasPermission] = React.useState<boolean | null>(null);
+  const [status, setStatus] = React.useState<string>("loading");
+  const [session, setSession] = React.useState<any>(null);
 
-  // Check permission on mount
+  // Check session and permission on mount, but only in browser
   React.useEffect(() => {
-    if (status === "authenticated" && session?.user?.id) {
-      checkUserPermission(session.user.id, "import:csv").then(permissionResult => {
-        setHasPermission(permissionResult);
-        if (!permissionResult) {
-          setError("You do not have permission to import CSV files.");
+    if (typeof window !== "undefined") {
+      import("next-auth/react").then(({ useSession }) => {
+        const { data, status } = useSession();
+        setSession(data);
+        setStatus(status);
+
+        if (status === "unauthenticated") {
+          router.push("/login");
+        } else if (status === "authenticated" && data?.user?.id) {
+          checkUserPermission(data.user.id, "import:csv").then(permissionResult => {
+            setHasPermission(permissionResult);
+            if (!permissionResult) {
+              setError("You do not have permission to import CSV files.");
+            }
+          });
         }
       });
-    } else if (status === "unauthenticated") {
-      router.push("/login");
     }
-  }, [status, session, router]);
+  }, [router]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
