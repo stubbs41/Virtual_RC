@@ -88,16 +88,22 @@ src/
 
 ### Vercel Deployment
 
-The application is deployed on Vercel. Due to a specific build issue with the route groups, follow these steps for a successful deployment:
+The application is deployed on Vercel. Follow these steps for a successful deployment:
 
 1. Fork this repository to your own GitHub account
 2. Create a new project on Vercel and connect it to your forked repository
-3. In the Vercel project settings, override the build command with:
-   ```
-   npm run build || true && node build-fix.js
-   ```
-4. Set the output directory to `.next`
-5. Deploy the project
+3. Add the following environment variables in the Vercel project settings:
+   - `NEXTAUTH_URL`: Your Vercel deployment URL (e.g., https://your-project.vercel.app)
+   - `NEXTAUTH_SECRET`: A secure random string for NextAuth.js
+   - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anon key
+   - `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role key
+4. Deploy the project
+5. If you encounter any issues, try the following:
+   - Check the deployment logs for specific errors
+   - Ensure all environment variables are correctly set
+   - Verify your Supabase project is properly configured
+   - Make sure your Next.js API routes are working correctly
 
 ### Alternative Deployment Methods
 

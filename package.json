@@ -3,14 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --no-lint",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "vercel-build": "next build --no-lint || true && node build-fix.js",
-    "postbuild": "node build-fix.js",
-    "deploy": "node deploy.js",
-    "export": "next build --no-lint && next export"
+    "lint": "next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",

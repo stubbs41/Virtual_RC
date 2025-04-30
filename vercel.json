@@ -1,9 +1,33 @@
 {
-  "buildCommand": "npm run vercel-build",
-  "outputDirectory": ".next",
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
   "framework": "nextjs",
   "cleanUrls": true,
+  "regions": ["iad1"],
   "github": {
-    "silent": false
-  }
+    "silent": false,
+    "autoAlias": true
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ]
 }
