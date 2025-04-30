@@ -9,8 +9,6 @@ const nextConfig = {
   experimental: {
     optimizeCss: true, // Enable CSS optimization
   },
-  // Add trailingSlash to ensure consistent URL handling
-  trailingSlash: true,
 };
 
 module.exports = nextConfig;
