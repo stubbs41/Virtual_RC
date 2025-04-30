@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "vercel-build": "next build --no-lint && node build-fix.js",
-    "postbuild": "node build-fix.js"
+    "postbuild": "node build-fix.js",
+    "deploy": "node deploy.js",
+    "export": "next build --no-lint && next export"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",

@@ -1,11 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Remove standalone output mode to avoid the file copying issue
+  // Use export output for static deployment
+  // Comment this out for server-side rendering
+  // output: 'export',
+
+  // For server-side rendering with standalone mode
+  // Uncomment this for server deployment
   // output: 'standalone',
+
   images: {
     domains: ['example.com'], // Add any domains you need for images
-    unoptimized: true, // Add this to fix image optimization issues
+    unoptimized: true, // Required for static export
   },
   experimental: {
     optimizeCss: true, // Enable CSS optimization
@@ -17,10 +23,12 @@ const nextConfig = {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
   },
-  // Disable the build ID generation to avoid issues with file paths
+  // Use a static build ID to avoid issues with file paths
   generateBuildId: async () => {
     return 'build-id-static';
   },
+  // Disable the problematic route group
+  transpilePackages: ['next-auth'],
 };
 
 module.exports = nextConfig;

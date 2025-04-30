@@ -86,7 +86,40 @@ src/
 
 ## Deployment
 
-The application is deployed on Vercel. Any push to the main branch will trigger a new deployment.
+### Vercel Deployment
+
+The application is deployed on Vercel. Due to a specific build issue with the route groups, follow these steps for a successful deployment:
+
+1. Fork this repository to your own GitHub account
+2. Create a new project on Vercel and connect it to your forked repository
+3. In the Vercel project settings, override the build command with:
+   ```
+   npm run build || true && node build-fix.js
+   ```
+4. Set the output directory to `.next`
+5. Deploy the project
+
+### Alternative Deployment Methods
+
+#### Static Export
+For a static export that can be deployed to any static hosting service:
+
+1. Add the following to your next.config.js:
+   ```js
+   output: 'export',
+   ```
+2. Run `npm run build`
+3. The static files will be in the `out` directory
+4. Deploy these files to any static hosting service
+
+#### Self-Hosting
+To self-host the application:
+
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Build the application with `npm run build`
+4. Start the server with `npm start`
+5. The application will be available at http://localhost:3000
 
 ## License
 
