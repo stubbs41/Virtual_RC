@@ -5,7 +5,7 @@ import { type SearchResultItem } from '@/components/ModelCard';
 const BASE_URL = 'https://www.cgtrader.com';
 
 // Helper function to extract price from CGTrader results
-function extractPrice($: cheerio.CheerioAPI, element: cheerio.Element): string {
+function extractPrice($: cheerio.CheerioAPI, element: any): string {
   // Inspect CGTrader search results page for price indicators
   // Example selectors (needs verification): '.item-price', '.price-tag__price'
   const priceElement = $(element).find('.item-price'); // Adjust selector

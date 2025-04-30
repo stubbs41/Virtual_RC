@@ -61,7 +61,7 @@ export default function SearchResultsWithAds({ results, sponsoredResults = [], i
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {combinedResults.map((item, index) => {
             // Check if the item is a sponsored result (e.g., by checking for a unique property like 'advertiser')
-            if (\'advertiser\' in item) {
+            if ('advertiser' in item) {
               return <SponsoredResultCard key={`sponsored-${index}-${item.url}`} model={item as SponsoredResultItem} />;
             } else {
               return <ModelCard key={`model-${index}-${item.url}`} model={item as SearchResultItem} />;
@@ -71,7 +71,7 @@ export default function SearchResultsWithAds({ results, sponsoredResults = [], i
       ) : (
         <div className="space-y-4">
           {combinedResults.map((item, index) => {
-             if (\'advertiser\' in item) {
+             if ('advertiser' in item) {
               return <SponsoredResultCard key={`sponsored-${index}-${item.url}`} model={item as SponsoredResultItem} />;
             } else {
               // Enhance list view later if needed, for now just use ModelCard

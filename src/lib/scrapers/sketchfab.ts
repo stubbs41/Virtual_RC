@@ -5,7 +5,7 @@ import { type SearchResultItem } from '@/components/ModelCard';
 const BASE_URL = 'https://sketchfab.com';
 
 // Helper function to extract price from Sketchfab results
-function extractPrice($: cheerio.CheerioAPI, element: cheerio.Element): string {
+function extractPrice($: cheerio.CheerioAPI, element: any): string {
   // Inspect Sketchfab search results page for price indicators
   // Example selector (needs verification): '.model-price', '.price-tag'
   const priceElement = $(element).find('.price'); // Adjust selector

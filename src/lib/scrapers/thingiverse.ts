@@ -5,7 +5,7 @@ import { type SearchResultItem } from '@/components/ModelCard';
 const BASE_URL = 'https://www.thingiverse.com';
 
 // Helper function to extract price - Thingiverse models are generally free
-function extractPrice($: cheerio.CheerioAPI, element: cheerio.Element): string {
+function extractPrice($: cheerio.CheerioAPI, element: any): string {
   // Assume free unless specific paid indicators are found
   return 'Free';
 }

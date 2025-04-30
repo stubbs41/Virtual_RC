@@ -92,7 +92,7 @@ export default function ScrapeImportPage() {
     }
   }, [status, fetchTargets]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       target_url: "",
@@ -239,7 +239,7 @@ export default function ScrapeImportPage() {
                 <FormItem>
                   <FormLabel>Selectors (Optional, JSON)</FormLabel>
                   <FormControl>
-                    <Textarea placeholder=\'{ "item": ".product-card", "title": ".title", "price": ".price" }\' {...field} value={field.value ?? ""} rows={4} />
+                    <Textarea placeholder={"{ \"item\": \".product-card\", \"title\": \".title\", \"price\": \".price\" }"} {...field} value={field.value ?? ""} rows={4} />
                   </FormControl>
                   <FormDescription>JSON object defining CSS selectors for scraping (structure depends on scraper implementation).</FormDescription>
                   <FormMessage />
@@ -323,4 +323,3 @@ export default function ScrapeImportPage() {
     </div>
   );
 }
-

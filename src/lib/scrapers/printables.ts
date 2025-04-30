@@ -5,7 +5,7 @@ import { type SearchResultItem } from '@/components/ModelCard'; // Assuming type
 const BASE_URL = 'https://www.printables.com';
 
 // Helper function to extract price - Printables often implies free
-function extractPrice($: cheerio.CheerioAPI, element: cheerio.Element): string {
+function extractPrice($: cheerio.CheerioAPI, element: any): string {
   // Printables models are generally free, but check for any indicators if needed
   // For now, assume free unless specific paid indicators are found (unlikely on Printables)
   return 'Free';

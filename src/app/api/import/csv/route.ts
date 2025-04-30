@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
           parsedData = results.data;
         }
       },
-      error: (error) => {
+      error: (error: Error) => {
         parseError = `CSV Parsing Failed: ${error.message}`;
       }
     });

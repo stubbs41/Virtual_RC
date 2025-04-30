@@ -3,13 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient"; // Import Supabase client
 
 // Import existing scraper functions
-import { scrapePrintables } from "@/lib/scrapers/printables";
-import { scrapeMakerworld } from "@/lib/scrapers/makerworld";
-import { scrapeThingiverse } from "@/lib/scrapers/thingiverse";
-import { scrapeSketchfab } from "@/lib/scrapers/sketchfab";
-import { scrapeCGTrader } from "@/lib/scrapers/cgtrader";
-import { scrapeMyMiniFactory } from "@/lib/scrapers/myminifactory";
-import { scrapeThangs } from "@/lib/scrapers/thangs";
+import { searchPrintables } from "@/lib/scrapers/printables";
+import { searchMakerworld } from "@/lib/scrapers/makerworld";
+import { searchThingiverse } from "@/lib/scrapers/thingiverse";
+import { searchSketchfab } from "@/lib/scrapers/sketchfab";
+import { searchCGTrader } from "@/lib/scrapers/cgtrader";
+import { searchMyMiniFactory } from "@/lib/scrapers/myminifactory";
+import { searchThangs } from "@/lib/scrapers/thangs";
 
 // Define a consistent result type
 interface SearchResult {
@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
   let allResults: SearchResult[] = [];
 
   try {
-    // --- Step 1: Query Supabase Database --- 
+    // --- Step 1: Query Supabase Database ---
     console.log(`Searching database for query: ${query}`);
     let dbQuery = supabase
       .from("models")
@@ -87,12 +87,12 @@ export async function GET(req: NextRequest) {
         author_name: item.author_name,
         // Map other fields if necessary
       }));
-      
+
       // If DB results are found, return them immediately
       return NextResponse.json({ results: allResults });
     }
 
-    // --- Step 2: Fallback to Live Scraping (if no DB results) --- 
+    // --- Step 2: Fallback to Live Scraping (if no DB results) ---
     console.log("No results found in database, proceeding to live scraping.");
 
     const requestedSources = sourcesParam ? sourcesParam.split(",").map(s => s.trim().toLowerCase()) : null;
@@ -101,13 +101,103 @@ export async function GET(req: NextRequest) {
     const scrapingPromises: Promise<SearchResult[]>[] = [];
 
     // Add scraping promises based on requested sources or all if none specified
-    if (shouldScrape("Printables")) scrapingPromises.push(scrapePrintables(query, { price: priceFilter, category: categoryFilter }));
-    if (shouldScrape("Makerworld")) scrapingPromises.push(scrapeMakerworld(query, { price: priceFilter, category: categoryFilter }));
-    if (shouldScrape("Thingiverse")) scrapingPromises.push(scrapeThingiverse(query, { price: priceFilter, category: categoryFilter }));
-    if (shouldScrape("Sketchfab")) scrapingPromises.push(scrapeSketchfab(query, { price: priceFilter, category: categoryFilter }));
-    if (shouldScrape("CGTrader")) scrapingPromises.push(scrapeCGTrader(query, { price: priceFilter, category: categoryFilter }));
-    if (shouldScrape("MyMiniFactory")) scrapingPromises.push(scrapeMyMiniFactory(query, { price: priceFilter, category: categoryFilter }));
-    if (shouldScrape("Thangs")) scrapingPromises.push(scrapeThangs(query, { price: priceFilter, category: categoryFilter }));
+    if (shouldScrape("Printables")) {
+      const promise = searchPrintables(query, { price: priceFilter ? priceFilter : undefined }).then(results =>
+        results.map(item => ({
+          title: item.title,
+          source_url: item.url,
+          thumbnail_url: item.thumbnail,
+          source_name: item.source || "Printables",
+          price: item.price,
+          author_name: null
+        }))
+      );
+      scrapingPromises.push(promise);
+    }
+
+    if (shouldScrape("Makerworld")) {
+      const promise = searchMakerworld(query, { price: priceFilter ? priceFilter : undefined }).then(results =>
+        results.map(item => ({
+          title: item.title,
+          source_url: item.url,
+          thumbnail_url: item.thumbnail,
+          source_name: item.source || "Makerworld",
+          price: item.price,
+          author_name: null
+        }))
+      );
+      scrapingPromises.push(promise);
+    }
+
+    if (shouldScrape("Thingiverse")) {
+      const promise = searchThingiverse(query, { price: priceFilter ? priceFilter : undefined }).then(results =>
+        results.map(item => ({
+          title: item.title,
+          source_url: item.url,
+          thumbnail_url: item.thumbnail,
+          source_name: item.source || "Thingiverse",
+          price: item.price,
+          author_name: null
+        }))
+      );
+      scrapingPromises.push(promise);
+    }
+
+    if (shouldScrape("Sketchfab")) {
+      const promise = searchSketchfab(query, { price: priceFilter ? priceFilter : undefined }).then(results =>
+        results.map(item => ({
+          title: item.title,
+          source_url: item.url,
+          thumbnail_url: item.thumbnail,
+          source_name: item.source || "Sketchfab",
+          price: item.price,
+          author_name: null
+        }))
+      );
+      scrapingPromises.push(promise);
+    }
+
+    if (shouldScrape("CGTrader")) {
+      const promise = searchCGTrader(query, { price: priceFilter ? priceFilter : undefined }).then(results =>
+        results.map(item => ({
+          title: item.title,
+          source_url: item.url,
+          thumbnail_url: item.thumbnail,
+          source_name: item.source || "CGTrader",
+          price: item.price,
+          author_name: null
+        }))
+      );
+      scrapingPromises.push(promise);
+    }
+
+    if (shouldScrape("MyMiniFactory")) {
+      const promise = searchMyMiniFactory(query, { price: priceFilter ? priceFilter : undefined }).then(results =>
+        results.map(item => ({
+          title: item.title,
+          source_url: item.url,
+          thumbnail_url: item.thumbnail,
+          source_name: item.source || "MyMiniFactory",
+          price: item.price,
+          author_name: null
+        }))
+      );
+      scrapingPromises.push(promise);
+    }
+
+    if (shouldScrape("Thangs")) {
+      const promise = searchThangs(query, { price: priceFilter ? priceFilter : undefined }).then(results =>
+        results.map(item => ({
+          title: item.title,
+          source_url: item.url,
+          thumbnail_url: item.thumbnail,
+          source_name: item.source || "Thangs",
+          price: item.price,
+          author_name: null
+        }))
+      );
+      scrapingPromises.push(promise);
+    }
     // Add other scrapers here...
 
     const resultsArrays = await Promise.allSettled(scrapingPromises);

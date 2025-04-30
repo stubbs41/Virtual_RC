@@ -5,12 +5,12 @@ import { type SearchResultItem } from '@/components/ModelCard';
 const BASE_URL = 'https://makerworld.com';
 
 // Helper function to extract price - MakerWorld models are generally free
-function extractPrice($: cheerio.CheerioAPI, element: cheerio.Element): string {
+function extractPrice($: cheerio.CheerioAPI, element: any): string {
   // Assume free unless specific paid indicators are found
   return 'Free';
 }
 
-export async function searchMakerWorld(query: string, options?: { price?: string }): Promise<SearchResultItem[]> {
+export async function searchMakerworld(query: string, options?: { price?: string }): Promise<SearchResultItem[]> {
   // MakerWorld search might use POST or have a different URL structure, needs verification
   // Assuming a GET request structure for now
   const searchUrl = `${BASE_URL}/en/models/search?keyword=${encodeURIComponent(query)}`;

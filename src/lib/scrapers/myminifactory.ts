@@ -5,7 +5,7 @@ import { type SearchResultItem } from '@/components/ModelCard';
 const BASE_URL = 'https://www.myminifactory.com';
 
 // Helper function to extract price from MyMiniFactory results
-function extractPrice($: cheerio.CheerioAPI, element: cheerio.Element): string {
+function extractPrice($: cheerio.CheerioAPI, element: any): string {
   // Inspect MyMiniFactory search results page for price indicators
   // Example selectors (needs verification): '.price', '.product-price'
   const priceElement = $(element).find('.product-price'); // Adjust selector

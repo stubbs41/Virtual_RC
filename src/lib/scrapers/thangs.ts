@@ -5,7 +5,7 @@ import { type SearchResultItem } from '@/components/ModelCard';
 const BASE_URL = 'https://thangs.com';
 
 // Helper function to extract price - Thangs has both free and paid models
-function extractPrice($: cheerio.CheerioAPI, element: cheerio.Element): string {
+function extractPrice($: cheerio.CheerioAPI, element: any): string {
   // Inspect Thangs search results page for price indicators
   // Example selectors (needs verification): '.price-tag', '.model-cost'
   const priceElement = $(element).find('.price-tag'); // Adjust selector

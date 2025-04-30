@@ -21,11 +21,11 @@ async function scrapeTargetUrl(url: string, selectors: any | null): Promise<any[
     });
     const $ = cheerio.load(html);
 
-    // --- Highly Simplified Example --- 
+    // --- Highly Simplified Example ---
     // This needs to be replaced with actual logic based on expected site structure
     // or using the provided selectors JSON.
     const results: any[] = [];
-    
+
     // Example: Try finding items based on common patterns or provided selectors
     const itemSelector = selectors?.item || ".product-item" || ".card"; // Example selectors
     const titleSelector = selectors?.title || ".product-title" || ".card-title";
@@ -50,7 +50,7 @@ async function scrapeTargetUrl(url: string, selectors: any | null): Promise<any[
                 title,
                 source_url,
                 // Attempt to parse price (very basic)
-                retail_price: parseFloat(priceText.replace(/[^\d.]/g, ")) || null,
+                retail_price: parseFloat(priceText.replace(/[^\d.]/g, "")) || null,
                 thumbnail_url: thumbnail_url ? new URL(thumbnail_url, url).toString() : null,
                 // Add other fields if extractable
             });
@@ -63,7 +63,7 @@ async function scrapeTargetUrl(url: string, selectors: any | null): Promise<any[
   } catch (error: any) {
     console.error(`Error scraping ${url}:`, error.message);
     // Don't throw here, allow job to be marked as failed with error
-    return []; 
+    return [];
   }
 }
 
@@ -194,7 +194,7 @@ export async function POST(req: NextRequest) {
         error_message: errors.length > 0 ? errors.slice(0, 5).join("\n") : null,
       })
       .eq("id", jobId);
-      
+
     // Update target success time
     await supabase.from("scraping_targets").update(targetUpdates).eq("id", targetId);
 
